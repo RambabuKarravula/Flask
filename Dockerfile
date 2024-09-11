@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install system dependencies required for OpenCV
+# Install system dependencies required for OpenCV and camera access
 RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     libgtk2.0-dev \
@@ -21,5 +21,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Expose the port the app runs on
 EXPOSE 5000
 
-# Command to run the Flask app
-CMD ["python", "app.py"]
+# Command to run the app using Gunicorn
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
